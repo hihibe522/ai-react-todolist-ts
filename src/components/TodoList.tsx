@@ -11,7 +11,6 @@ import {
   updateTodoPriority,
   deleteTodo as deleteTodoFromFirestore,
 } from '../services/TodoService';
-import './TodoList.css';
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<TodoItemType[]>([]);
@@ -31,8 +30,9 @@ const TodoList: React.FC = () => {
           const fetchedTodos = await getTodos(user.id);
           setTodos(fetchedTodos);
         } else {
-          // 未登入時仍然可以使用本地儲存
-          const savedTodos = localStorage.getItem('todos');
+          // 未登入時使用一個特定的鍵來保存待辦事項
+          const anonymousKey = 'anonymous_todos';
+          const savedTodos = localStorage.getItem(anonymousKey);
           if (savedTodos) {
             try {
               setTodos(JSON.parse(savedTodos));
@@ -40,6 +40,8 @@ const TodoList: React.FC = () => {
               console.error('無法解析待辦事項', e);
               setTodos([]);
             }
+          } else {
+            setTodos([]);
           }
         }
       } catch (error) {
@@ -54,8 +56,10 @@ const TodoList: React.FC = () => {
 
   // 未登入時，儲存待辦事項到 localStorage
   useEffect(() => {
-    if (!user && todos.length > 0) {
-      localStorage.setItem('todos', JSON.stringify(todos));
+    if (!user && todos.length >= 0) {
+      // 使用一個特定的鍵來保存匿名用戶的待辦事項
+      const anonymousKey = 'anonymous_todos';
+      localStorage.setItem(anonymousKey, JSON.stringify(todos));
     }
   }, [todos, user]);
 

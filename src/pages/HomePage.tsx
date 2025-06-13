@@ -1,7 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 
 const HomePage: React.FC = () => {
+  const { user, logout } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  // 處理選擇不登入直接使用
+  const handleAnonymousAccess = async () => {
+    // 如果用戶已登入，先登出
+    if (user) {
+      await logout();
+    }
+    // 清除之前的匿名數據
+    localStorage.removeItem('anonymous_todos');
+    // 跳轉到儀表板
+    navigate('/dashboard');
+  };
+
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-8">
       <div className="text-center mb-8">
@@ -16,12 +32,12 @@ const HomePage: React.FC = () => {
         >
           登入
         </Link>
-        <Link
-          to="/dashboard"
+        <button
+          onClick={handleAnonymousAccess}
           className="px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition-colors"
         >
           不登入直接使用
-        </Link>
+        </button>
       </div>
 
       <div className="bg-gray-50 p-8 rounded-lg shadow-md">

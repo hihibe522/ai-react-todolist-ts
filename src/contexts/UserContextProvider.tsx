@@ -25,6 +25,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
           isLoggedIn: true,
         };
 
+        // 清除匿名用戶數據
+        localStorage.removeItem('anonymous_todos');
+
         // 將用戶信息存儲在 localStorage 中
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
