@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://your-username.github.io/ai-react-todolist-ts",
+  "homepage": "https://hihibe522.github.io/ai-react-todolist-ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
