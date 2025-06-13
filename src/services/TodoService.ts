@@ -28,6 +28,8 @@ const convertToTodoItem = (doc: QueryDocumentSnapshot<DocumentData>): TodoItemTy
     createdAt: data.createdAt?.toDate() || new Date(),
     priority: data.priority || 'medium',
     userId: data.userId || null,
+    tags: data.tags || [],
+    category: data.category || '其他',
   };
 };
 
@@ -122,6 +124,28 @@ export const updateTodoPriority = async (
     await updateDoc(todoRef, { priority });
   } catch (error) {
     console.error('更新待辦事項優先級時發生錯誤', error);
+    throw error;
+  }
+};
+
+// 更新待辦事項標籤
+export const updateTodoTags = async (todoId: string, tags: string[]): Promise<void> => {
+  try {
+    const todoRef = doc(db, TODOS_COLLECTION, todoId);
+    await updateDoc(todoRef, { tags });
+  } catch (error) {
+    console.error('更新待辦事項標籤時發生錯誤', error);
+    throw error;
+  }
+};
+
+// 更新待辦事項分類
+export const updateTodoCategory = async (todoId: string, category: string): Promise<void> => {
+  try {
+    const todoRef = doc(db, TODOS_COLLECTION, todoId);
+    await updateDoc(todoRef, { category });
+  } catch (error) {
+    console.error('更新待辦事項分類時發生錯誤', error);
     throw error;
   }
 };
